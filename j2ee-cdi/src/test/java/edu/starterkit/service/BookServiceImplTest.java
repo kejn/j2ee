@@ -10,22 +10,21 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.jglue.cdiunit.AdditionalClasses;
-import org.jglue.cdiunit.AdditionalPackages;
 import org.jglue.cdiunit.CdiRunner;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import edu.starterkit.aop.BookDaoAdvisor;
-import edu.starterkit.dao.impl.BookDaoImpl;
+import edu.starterkit.dao.impl.BookDaoHibernateImpl;
 import edu.starterkit.exception.BookNotNullIdException;
+import edu.starterkit.logger.LoggerInterceptor;
+import edu.starterkit.observer.BooksObserver;
 import edu.starterkit.service.impl.BookServiceImpl;
 import edu.starterkit.to.BookTo;
 
-
-
 @RunWith(CdiRunner.class)
-@AdditionalClasses({BookServiceImpl.class, BookDaoImpl.class, BookDaoAdvisor.class})
+@AdditionalClasses({BooksObserver.class, BookServiceImpl.class, BookDaoHibernateImpl.class, BookDaoAdvisor.class, LoggerInterceptor.class})
 public class BookServiceImplTest {
 
     @Inject
@@ -60,7 +59,16 @@ public class BookServiceImplTest {
         bookToSave.setId(22L);
         // when
         bookService.saveBook(bookToSave);
+        
         // then
         fail("test should throw BookNotNullIdException");
+    }
+
+    @Test
+    public void testShouldSaveBook() {
+    	// given
+    	final BookTo bookToSave = new BookTo(null,"test","author");
+    	// when
+    	bookService.saveBook(bookToSave);
     }
 }

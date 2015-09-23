@@ -38,4 +38,14 @@ public class BookTo implements IdAware {
     public void setAuthors(String authors) {
         this.authors = authors;
     }
+    
+    @Override
+    public String toString() {
+    	StringBuilder stringBuilder = new StringBuilder();
+    	stringBuilder.append("@" + getClass().getSimpleName());
+    	stringBuilder.append("[id=" + id);
+    	stringBuilder.append(",title=" + title);
+    	stringBuilder.append(",authors=" + authors + "]");
+    	return stringBuilder.toString();
+    }
 }

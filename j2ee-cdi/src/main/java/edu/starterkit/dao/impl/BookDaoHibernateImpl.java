@@ -1,26 +1,31 @@
 package edu.starterkit.dao.impl;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import javax.enterprise.event.Event;
+import javax.enterprise.inject.Any;
+import javax.inject.Inject;
 
 import edu.starterkit.aop.NullableId;
 import edu.starterkit.common.Sequence;
 import edu.starterkit.dao.BookDao;
 import edu.starterkit.to.BookTo;
 
-@DaoImpl
-public class BookDaoImpl implements BookDao {
+@DaoHibernateImpl
+public class BookDaoHibernateImpl implements BookDao {
+	
+	private final Set<BookTo> ALL_BOOKS = new HashSet<>();
 
-    private final Set<BookTo> ALL_BOOKS = new HashSet<>();
-
+	@Inject
     private Sequence sequence;
-
+    
+    @Inject @Any
+    private Event<BookTo> bookEvent;
+    
     @Override
     public List<BookTo> findAll() {
 //    	System.out.println("findAll");
@@ -44,6 +49,7 @@ public class BookDaoImpl implements BookDao {
             book.setId(sequence.nextValue(ALL_BOOKS));
         }
         ALL_BOOKS.add(book);
+        bookEvent.fire(book);
         return book;
     }
 
@@ -60,4 +66,5 @@ public class BookDaoImpl implements BookDao {
         ALL_BOOKS.add(new BookTo(5L, "Pan Samochodzik i Fantomas", "Zbigniew Nienacki"));
         ALL_BOOKS.add(new BookTo(6L, "Zemsta", "Aleksander Fredro"));
     }
+
 }
