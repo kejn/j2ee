@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import edu.starterkit.aop.NullableId;
 import edu.starterkit.common.Sequence;
@@ -23,7 +22,6 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<BookTo> findAll() {
-//    	System.out.println("findAll");
         return new ArrayList<>(ALL_BOOKS);
     }
 
